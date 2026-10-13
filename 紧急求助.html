@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紧急求助 - SafeWalk</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+        
+        /* 顶部信息栏 */
+        .top-bar {
+            background: #f5f5f5;
+            padding: 8px 40px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* 导航栏 - 和其他子网页统一 */
+        nav {
+            position: sticky; top: 0; left: 0; right: 0;
+            background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 100; padding: 0 40px; height: 70px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon {
+            width: 40px; height: 40px;
+            border: 2px solid #3949ab;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo-icon svg { width: 20px; height: 20px; }
+        .logo-text { font-size: 20px; font-weight: 700; color: #3949ab; }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { text-decoration: none; color: #4a5568; font-size: 15px; }
+        .nav-contact { background: #3949ab; color: #fff; border: none; padding: 10px 24px; border-radius: 8px; font-size: 15px; cursor: pointer; }
+        
+        /* Hero区 - 保留原来的红色渐变，不变 */
+        .hero {
+            margin-top: 0;
+            min-height: 60vh;
+            background: linear-gradient(135deg, #c53030 0%, #e53e3e 50%, #fc8181 100%);
+            display: flex; align-items: center; padding: 60px 40px;
+        }
+        .hero-content { max-width: 1200px; margin: 0 auto; width: 100%; text-align: center; }
+        .hero h1 { font-size: 56px; color: #fff; margin-bottom: 20px; font-weight: 800; }
+        .hero p { font-size: 20px; color: rgba(255,255,255,0.95); max-width: 700px; margin: 0 auto; }
+        .hero-sos {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 800; color: #c53030;
+            margin: 40px auto 0; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        /* 内容区 - 统一风格 */
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        /* 服务特点 */
+        .feature-title {
+            font-size: 28px; color: #3949ab; margin-bottom: 40px; text-align: center;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        .feature-item {
+            background: #fff3e0;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 4px solid #ff9800;
+        }
+        .feature-item h3 {
+            font-size: 20px;
+            color: #e65100;
+            margin-bottom: 12px;
+        }
+        .feature-item p {
+            font-size: 15px;
+            color: #4a5568;
+            line-height: 1.7;
+        }
+        
+        /* 学生免费领取专区 */
+        .student-section {
+            background: #e3f2fd;
+            padding: 60px 40px;
+        }
+        .student-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .student-title {
+            font-size: 32px;
+            color: #1565c0;
+            margin-bottom: 16px;
+        }
+        .student-desc {
+            font-size: 17px;
+            color: #4a5568;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .student-badge {
+            display: inline-block;
+            background: #43a047;
+            color: #fff;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* 大学生志愿者专区 */
+        .volunteer-section {
+            background: #f3e5f5;
+            padding: 60px 40px;
+        }
+        .volunteer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .volunteer-title {
+            font-size: 32px;
+            color: #7b1fa2;
+            margin-bottom: 16px;
+        }
+        .volunteer-desc {
+            font-size: 17px;
+            color: #4a5568;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* 数据统计 */
+        .stats-section {
+            background: #e8f5e9; padding: 60px 40px;
+        }
+        .stats-grid {
+            max-width: 1000px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center;
+        }
+        .stat-number {
+            font-size: 48px; font-weight: 700; color: #43a047; margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 16px; color: #4a5568;
+        }
+        
+        /* CTA区 */
+        .cta-section {
+            max-width: 1000px; margin: 0 auto; padding: 80px 40px; text-align: center;
+        }
+        .btn-primary {
+            display: inline-block; background: #3949ab; color: #fff;
+            padding: 14px 32px; border-radius: 8px; text-decoration: none;
+            font-size: 16px; transition: background 0.3s;
+        }
+        .btn-primary:hover { background: #303f9f; }
+        
+        /* 底部footer - 和主网页一样的蓝色 */
+        footer {
+            background: #2c6e9b;
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 0;
+        }
+        footer .footer-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+        footer .footer-desc { font-size: 14px; opacity: 0.8; }
+
+        /* 悬浮按钮 */
+        .float-btn {
+          position: fixed;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #fff;
+          border: none;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 999;
+          transition: transform 0.2s;
+        }
+        .float-btn:hover { transform: scale(1.1); }
+        .float-btn svg { width: 22px; height: 22px; fill: #666; }
+        #backToTop {
+          bottom: 80px;
+          opacity: 0;
+          visibility: hidden;
+        }
+        #backToTop.show {
+          opacity: 1;
+          visibility: visible;
+        }
+        #fontBtn { bottom: 140px; }
+        #printBtn { bottom: 200px; }
+        #voiceBtn { bottom: 260px; }
+        /* 字体放大模式 */
+        body.font-large { font-size: 18px !important; }
+        body.font-large h1 { font-size: 42px !important; }
+        body.font-large h2 { font-size: 36px !important; }
+        body.font-large h3 { font-size: 28px !important; }
+        body.font-large p { font-size: 17px !important; }
+
+        /* 滚动淡入动画 */
+        .fade-in {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.6s ease-out;
+        }
+        .fade-in.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+    
+    /* ===== 移动端响应式（max-width:768px） ===== */
+    @media (max-width: 768px) {
+      /* 顶部信息栏 */
+      .top-bar { padding: 8px 20px !important; flex-wrap: wrap; gap: 4px; }
+      .top-bar-right { gap: 16px; flex-wrap: wrap; }
+
+      /* 导航 */
+      nav { padding: 0 20px !important; height: auto !important; min-height: 60px; flex-wrap: wrap; }
+      .logo-icon { width: 38px; height: 38px; }
+      .logo-text { font-size: 19px; }
+      .nav-links { gap: 16px; width: 100%; order: 3; justify-content: center; padding: 6px 0; }
+      .nav-links a { font-size: 14px; }
+      .nav-contact { padding: 8px 16px; font-size: 14px; }
+
+      /* Hero（照片版） */
+      .hero-photos { height: 200px; }
+      .hero-mask-left { padding-left: 24px; }
+      .hero-mask-left h1 { font-size: 24px; }
+      .arches { height: 90px; }
+
+      /* Hero（红色紧急版） */
+      .hero { min-height: 50vh; padding: 40px 20px; }
+      .hero h1 { font-size: 36px; }
+      .hero p { font-size: 16px; }
+      .hero-sos { width: 90px; height: 90px; font-size: 24px; margin-top: 24px; }
+
+      /* 内容区 */
+      .content { padding: 40px 24px !important; margin: 20px auto; }
+      .content h2 { font-size: 24px; }
+      .content p { font-size: 15px; }
+
+      /* 特点网格：单列 */
+      .features-grid, .features { grid-template-columns: 1fr; gap: 16px; }
+      .feature-card, .feature-item { padding: 20px; }
+
+      /* 全宽背景区：edge to edge，负 margin 与 content padding 对齐 */
+      .process-section, .student-section, .volunteer-section, .stats-section {
+        padding: 40px 24px !important;
+        margin-left: -24px !important; margin-right: -24px !important;
+      }
+      .process-section, .student-section { margin-top: 30px !important; margin-bottom: 30px !important; }
+      .volunteer-section, .stats-section { margin-top: 0 !important; margin-bottom: 30px !important; }
+
+      /* 流程步骤：2列 */
+      .process-steps { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+
+      /* 数据统计：单列 */
+      .stats-grid { grid-template-columns: 1fr; gap: 24px; }
+      .stat-number { font-size: 38px; }
+
+      /* 标题 */
+      .student-title, .volunteer-title, .feature-title { font-size: 24px; }
+      .student-desc, .volunteer-desc { font-size: 15px; }
+
+      /* FAQ */
+      .faq-item { padding: 20px; }
+
+      /* CTA */
+      .cta-section { padding: 30px 24px !important; margin: 30px auto !important; }
+
+      /* 输入框：16px 防 iOS 聚焦缩放 */
+      input, textarea { font-size: 16px !important; }
+    }
+
+</style>
+</head>
+<body>
+    <!-- 顶部信息栏 -->
+    <div class="top-bar">
+        <span>浙传 VIDI 实验室</span>
+        <span>助老科技项目</span>
+        <span>咨询电话：400-XXX-XXXX</span>
+    </div>
+    
+    <!-- 导航栏 -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+                    <path d="M8 20 L14 8 L20 20" stroke="#3949ab" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 15 L18 15" stroke="#3949ab" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="logo-text">SafeWalk</div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="安心陪行.html">首页</a></li>
+            <li><a href="#" class="active">服务项目</a></li>
+            <li><a href="#">关于我们</a></li>
+        </ul>
+        <button class="nav-contact">联系我们</button>
+    </nav>
+    
+    <!-- Hero区 - 保留原来的红色渐变，不变 -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>紧急求助</h1>
+            <p>一键求助，自动把位置发给子女和社区紧急联系人。五秒倒计时取消防误触，关键时刻不手抖。</p>
+            <div class="hero-sos">SOS</div>
+        </div>
+    </div>
+    
+    <!-- 内容区 -->
+    <div class="content">
+        <div class="fade-in" style="display:inline-block; background:#3949ab; color:#fff; padding:10px 24px; border-radius:24px; font-size:18px; font-weight:600; margin-bottom:16px;">
+            什么是紧急求助服务？
+        </div>
+        <p class="fade-in">老人一个人在家或者出门的时候，万一突然身体不舒服、摔倒了、遇到危险，身边没人帮忙，翻手机找子女电话都来不及。紧急求助服务就是给老人戴的手环上一个大大的红色SOS按钮，遇到任何紧急情况，老人只要长按这个按钮，系统就会立刻帮他联系到子女和工作人员，不用记电话、不用找手机，一个按钮就够了。</p>
+        
+        <div class="fade-in" style="display:inline-block; background:#3949ab; color:#fff; padding:10px 24px; border-radius:24px; font-size:18px; font-weight:600; margin-bottom:16px; margin-top:32px;">
+            按下按钮之后会发生什么？
+        </div>
+        <p class="fade-in">老人长按SOS按钮3秒之后，会有5秒的倒计时，这期间如果是不小心按到了，老人可以直接取消，不会误触发。倒计时结束之后，系统会同时做三件事：第一，自动给子女打电话，免提接通，老人不用拿手机就能说话；第二，给子女发微信和短信，告诉他们老人遇到紧急情况了；第三，把老人的实时位置一起发过去，子女不用再问老人"你在哪"，直接就能看到位置，马上赶过去。如果子女没接电话，系统还会自动打给我们的24小时值班人员和社区紧急联系人，确保老人在关键时刻，一定有人响应。</p>
+        
+        <div class="fade-in" style="display:inline-block; background:#3949ab; color:#fff; padding:10px 24px; border-radius:24px; font-size:18px; font-weight:600; margin-bottom:16px; margin-top:32px;">
+            这个服务有什么用？
+        </div>
+        <p class="fade-in">很多老人遇到紧急情况的时候，要么慌得不知道给谁打电话，要么手抖得拿不住手机翻通讯录，错过了最佳的求助时间。这个SOS按钮就放在老人最容易按到的地方，操作特别简单，不用学，就按一个按钮。我们24小时都有人值班，不管是白天还是半夜，只要老人按了求助，我们就会立刻响应，帮老人联系家人、联系急救，让老人在最需要帮助的时候，不是一个人扛着。</p>
+    </div>
+    
+    <!-- 底部footer -->
+    <footer>
+        <div class="footer-title">SafeWalk</div>
+        <div class="footer-desc">让每一位长者安心出门，平安回家</div>
+        <div class="footer-desc" style="margin-top:8px;">浙传 VIDI 实验室 · 助老科技项目</div>
+    </footer>
+
+    <!-- 悬浮按钮 -->
+    <button class="float-btn" id="printBtn" onclick="window.print()" title="打印 / 保存PDF" style="bottom:200px; right:24px;">
+      <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    </button>
+    <button class="float-btn" id="voiceBtn" onclick="toggleVoice()" title="语音播报" style="bottom:260px; right:24px;">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+    </button>
+    <button class="float-btn" id="fontBtn" onclick="document.body.classList.toggle('font-large')" title="放大字体" style="bottom:140px; right:24px;">
+      <svg viewBox="0 0 24 24"><path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"/></svg>
+    </button>
+    <button class="float-btn" id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="返回顶部" style="bottom:80px; right:24px;">
+      <svg viewBox="0 0 24 24"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>
+    </button>
+
+    <script>
+      // 返回顶部按钮显示/隐藏
+      window.addEventListener('scroll', () => {
+        const backToTop = document.getElementById('backToTop');
+        if (window.scrollY > 300) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 分享功能
+      function sharePage() {
+        if (navigator.share) {
+          navigator.share({
+            title: document.title,
+            url: window.location.href
+          });
+        } else {
+          prompt('复制下面的链接分享给亲友：', window.location.href);
+        }
+      }
+
+      // 滚动淡入动画
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
